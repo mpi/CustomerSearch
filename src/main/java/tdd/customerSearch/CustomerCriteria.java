@@ -1,6 +1,9 @@
 package tdd.customerSearch;
 
+import static java.util.Arrays.asList;
+
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class CustomerCriteria {
@@ -74,7 +77,7 @@ public class CustomerCriteria {
     public Integer getProductCount() {
         return productCount;
     }
-    public Integer getTotalPrice() {
+    public Integer getTotalPriceGreaterThan() {
         return totalPrice;
     }
     public void setFirstname(String firstname) {
@@ -119,10 +122,13 @@ public class CustomerCriteria {
     public void setType(Set<ProductType> type) {
         this.type = type;
     }
+    public void setType(ProductType... types) {
+        setType(new HashSet<ProductType>(asList(types)));
+    }
     public void setProductCount(Integer productCount) {
         this.productCount = productCount;
     }
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPriceGreaterThan(Integer totalPrice) {
         this.totalPrice = totalPrice;
     }
     

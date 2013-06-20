@@ -23,14 +23,14 @@ public class CustomerDao {
         
         if(criteria.getFirstname() != null || criteria.getLastname() != null || criteria.getMale() != null ||
                 criteria.getStreet() != null || criteria.getCity() != null || criteria.getCountry() != null || criteria.getZipCode() != null){
-            sql += " JOIN customer_contact cp on cp.customer_number = c.number";
+            sql += " JOIN customer_contact cp on cp.customer_num = c.customer_num";
             sql += " JOIN contact x ON x.id = cp.contact_id";
         }
         if(criteria.getStreet() != null || criteria.getCity() != null || criteria.getCountry() != null || criteria.getZipCode() != null){
             sql += " JOIN address a on a.contact_id = x.id";
         }
         if(criteria.getSerialNumber() != null || (criteria.getType() != null && !criteria.getType().isEmpty())){
-            sql += " JOIN product p on p.customer_number = c.customer_number";
+            sql += " JOIN product p on p.customer_num = c.customer_num";
         }
         
         List<String> where = new ArrayList<String>();
@@ -42,7 +42,7 @@ public class CustomerDao {
         if(criteria.getLastname() != null){
             where.add("x.lastname = '" + criteria.getLastname() + "'");
         }
-        if(criteria.getLastname() != null){
+        if(criteria.getMale() != null){
             where.add("x.male = '" + (criteria.getMale() ? "Y" : "N") + "'");
         }
         
@@ -53,7 +53,7 @@ public class CustomerDao {
         if(criteria.getCity() != null){
             where.add("a.city = '" + criteria.getCity() + "'");
         }
-        if(criteria.getCountry() != null){
+        if(criteria.getCity() != null){
             where.add("a.country = '" + criteria.getCountry() + "'");
         }
         if(criteria.getZipCode() != null){
@@ -78,6 +78,11 @@ public class CustomerDao {
             }
             
             where.add("p.product_type in (" + in + ")");
+        }
+        
+        // Product Aggregate:
+        if(criteria.getTotalPriceGreaterThan() != null){
+            where.add("(SELECT sum(pa.price) FROM product pa WHERE pa.customer_num = c.customer_num) > " + criteria.getTotalPriceGreaterThan() + "");
         }
         
         // Customer:
